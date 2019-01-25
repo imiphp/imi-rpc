@@ -9,6 +9,8 @@
 
 在 imi 框架中开发 RPC 服务的基础组件。本组件不提供实际的 RPC 实现，仅提供开发 RPC 服务的一些插槽。
 
+`imi-hprose` 基于 `imi-rpc` 实现：https://github.com/imiphp/imi-hprose
+
 ## Composer
 
 本项目可以使用composer安装，遵循psr-4自动加载规则，在你的 `composer.json` 中加入下面的内容:
