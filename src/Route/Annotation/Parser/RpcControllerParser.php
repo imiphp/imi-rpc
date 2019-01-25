@@ -27,7 +27,7 @@ class RpcControllerParser extends BaseParser
     public function parse(\Imi\Bean\Annotation\Base $annotation, string $className, string $target, string $targetName)
     {
         $eventName = 'IMI.RPC.ANNOTATION.PARSER:' . get_class($annotation);
-        Event::trigger($eventName, func_get_args(), $this);
+        Event::trigger($eventName, \compact('annotation', 'className', 'target', 'targetName'), $this);
     }
 
 }

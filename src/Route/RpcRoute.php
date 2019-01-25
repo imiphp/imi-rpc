@@ -1,13 +1,14 @@
 <?php
 namespace Imi\Rpc\Route;
 
+use Imi\Util\Text;
+use Imi\Event\Event;
 use Imi\ServerManage;
 use Imi\Bean\Annotation\Bean;
 use Imi\Util\ObjectArrayHelper;
 use Imi\Server\Route\RouteCallable;
 use Imi\Rpc\Controller\RpcController;
 use Imi\Rpc\Route\Annotation\RpcRoute as RpcRouteAnnotation;
-use Imi\Util\Text;
 
 /**
  * @Bean("RpcRoute")
@@ -33,11 +34,6 @@ class RpcRoute implements IRoute
      */
     public function addRuleAnnotation(RpcRouteAnnotation $annotation, $callable, $options = [])
     {
-        $serverName = $options['serverName'];
-        $controllerAnnotation = $options['controller'];
-        $methodName = $options['methodName'];
-        $rpcServer = ServerManage::getServer($serverName)->getRpcService();
-
         // callable
         $callable = $this->parseCallable($callable);
         $isObject = is_array($callable) && isset($callable[0]) && $callable[0] instanceof RpcController;
@@ -48,7 +44,7 @@ class RpcRoute implements IRoute
         }
 
         $eventName = 'IMI.RPC.ROUTE.ADD_RULE:' . $annotation->rcpType;
-        Event::trigger($eventName, func_get_args(), $this);
+        Event::trigger($eventName, \compact('annotation', 'callable', 'options'), $this);
 
     }
 

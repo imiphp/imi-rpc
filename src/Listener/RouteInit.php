@@ -12,6 +12,8 @@ use Imi\Rpc\Route\Annotation\RpcRoute;
 use Imi\Rpc\Route\Annotation\RpcAction;
 use Imi\Rpc\Route\Annotation\Parser\RpcControllerParser;
 use Imi\Rpc\BaseRpcServer;
+use Imi\Event\Event;
+use Imi\Bean\BeanFactory;
 
 /**
  * RPC 服务器路由初始化
@@ -45,6 +47,8 @@ class RouteInit implements IEventListener
             RequestContext::create();
             RequestContext::set('server', $server);
             $route = $server->getBean('RpcRoute');
+            $serverTypeName = $this->getServerTypeName(BeanFactory::getObjectClass($server));
+            $eventName = 'IMI.ROUTE.INIT.DEFAULT:' . $serverTypeName;
             foreach($controllerParser->getByServer($name) as $className => $classItem)
             {
                 $classAnnotation = $classItem['annotation'];
@@ -53,11 +57,16 @@ class RouteInit implements IEventListener
                     $routes = AnnotationManager::getMethodAnnotations($className, $methodName, RpcRoute::class);
                     if(!isset($routes[0]))
                     {
-                        $routes = [
-                            new RpcRoute([
-                                'name' => $methodName,
-                            ])
-                        ];
+                        $data = compact('className', 'classAnnotation', 'methodName');
+                        $result = null;
+                        $data['result'] = &$result;
+                        Event::trigger($eventName, $data);
+                        if(null !== $result)
+                        {
+                            $routes = [
+                                $result
+                            ];
+                        }
                     }
                     
                     foreach($routes as $routeItem)
@@ -73,4 +82,21 @@ class RouteInit implements IEventListener
         }
     }
 
+    /**
+     * 获取服务器类型名称
+     *
+     * @param string $className
+     * @return string|boolean
+     */
+    private function getServerTypeName($className)
+    {
+        if(\preg_match('/Imi\\\\Server\\\\([^\\\\]+)\\\\Server/', $className, $matches) > 0)
+        {
+            return $matches[1];
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
