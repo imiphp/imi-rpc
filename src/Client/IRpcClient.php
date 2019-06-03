@@ -22,6 +22,13 @@ interface IRpcClient
     public function isConnected(): bool;
 
     /**
+     * 获取实例对象
+     *
+     * @return mixed
+     */
+    public function getInstance();
+
+    /**
      * 获取服务对象
      *
      * @param string $name 服务名
