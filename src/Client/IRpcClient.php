@@ -39,7 +39,7 @@ interface IRpcClient
      * 获取服务对象
      *
      * @param string $name 服务名
-     * @return IService
+     * @return \Imi\Rpc\Client\IService
      */
     public function getService($name = null): IService;
 
