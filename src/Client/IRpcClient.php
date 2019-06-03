@@ -4,6 +4,13 @@ namespace Imi\Rpc\Client;
 interface IRpcClient
 {
     /**
+     * 构造方法
+     *
+     * @param array $config 配置
+     */
+    public function __construct($config);
+
+    /**
      * 打开
      * @return boolean
      */
