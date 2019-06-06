@@ -1,6 +1,7 @@
 <?php
 namespace Imi\Rpc\Client\Pool;
 
+use Imi\Config;
 use Imi\RequestContext;
 use Imi\Pool\PoolManager;
 
