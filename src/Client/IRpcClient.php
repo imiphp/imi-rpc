@@ -6,9 +6,9 @@ interface IRpcClient
     /**
      * 构造方法
      *
-     * @param array $config 配置
+     * @param array $options 配置
      */
-    public function __construct($config);
+    public function __construct($options);
 
     /**
      * 打开
