@@ -43,4 +43,11 @@ interface IRpcClient
      */
     public function getService($name = null): IService;
 
+    /**
+     * 获取配置
+     *
+     * @return array
+     */
+    public function getOptions();
+
 }
