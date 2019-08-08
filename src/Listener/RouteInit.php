@@ -51,7 +51,7 @@ class RouteInit implements IEventListener
             $eventName = 'IMI.ROUTE.INIT.DEFAULT:' . $serverTypeName;
             foreach($controllerParser->getByServer($name) as $className => $classItem)
             {
-                $classAnnotation = $classItem['annotation'];
+                $classAnnotation = $classItem->getAnnotation();
                 foreach(AnnotationManager::getMethodsAnnotations($className, RpcAction::class) as $methodName => $actionAnnotations)
                 {
                     $routes = AnnotationManager::getMethodAnnotations($className, $methodName, RpcRoute::class);
