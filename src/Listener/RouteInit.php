@@ -71,7 +71,7 @@ class RouteInit implements IEventListener
                     
                     foreach($routes as $routeItem)
                     {
-                        $route->addRuleAnnotation($routeItem, new RouteCallable($className, $methodName), [
+                        $route->addRuleAnnotation($routeItem, new RouteCallable($server, $className, $methodName), [
                             'serverName'    =>  $name,
                             'controller'    =>  $classAnnotation,
                         ]);
