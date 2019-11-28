@@ -3,6 +3,7 @@ namespace Imi\Rpc\Route\Annotation;
 
 use Imi\Bean\Annotation\Base;
 use Imi\Bean\Annotation\Parser;
+use Imi\Rpc\Route\Annotation\Contract\IRpcRoute;
 
 /**
  * RPC 路由注解
@@ -10,7 +11,7 @@ use Imi\Bean\Annotation\Parser;
  * @Target("METHOD")
  * @Parser("Imi\Rpc\Route\Annotation\Parser\RpcControllerParser")
  */
-abstract class RpcRoute extends Base
+abstract class RpcRoute extends Base implements IRpcRoute
 {
     /**
      * 只传一个参数时的参数名
@@ -31,5 +32,16 @@ abstract class RpcRoute extends Base
      *
      * @var string
      */
-    public $rcpType;
+    public $rpcType;
+
+    /**
+     * 获取 RPC 类型
+     *
+     * @return string
+     */
+    public function getRpcType()
+    {
+        return $this->rpcType;
+    }
+
 }

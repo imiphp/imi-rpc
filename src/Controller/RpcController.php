@@ -1,7 +1,9 @@
 <?php
 namespace Imi\Rpc\Controller;
 
-class RpcController
+use Imi\Rpc\Contract\IRpcController;
+
+class RpcController implements IRpcController
 {
 
 }

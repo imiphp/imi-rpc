@@ -1,19 +1,17 @@
 <?php
 namespace Imi\Rpc\Listener;
 
+use Imi\Event\Event;
 use Imi\ServerManage;
 use Imi\RequestContext;
+use Imi\Bean\BeanFactory;
 use Imi\Event\EventParam;
 use Imi\Event\IEventListener;
+use Imi\Rpc\Contract\IRpcServer;
 use Imi\Bean\Annotation\Listener;
 use Imi\Server\Route\RouteCallable;
 use Imi\Bean\Annotation\AnnotationManager;
-use Imi\Rpc\Route\Annotation\RpcRoute;
-use Imi\Rpc\Route\Annotation\RpcAction;
 use Imi\Rpc\Route\Annotation\Parser\RpcControllerParser;
-use Imi\Rpc\BaseRpcServer;
-use Imi\Event\Event;
-use Imi\Bean\BeanFactory;
 
 /**
  * RPC 服务器路由初始化
@@ -40,40 +38,49 @@ class RouteInit implements IEventListener
         $controllerParser = RpcControllerParser::getInstance();
         foreach(ServerManage::getServers() as $name => $server)
         {
-            if(!$server instanceof BaseRpcServer)
+            if(!$server instanceof IRpcServer)
             {
                 continue;
             }
+            /** @var IRpcServer $server */
+            $controllerAnnotationClass = $server->getControllerAnnotation();
+            $actionAnnotationClass = $server->getActionAnnotation();
+            $routeAnnotationClass = $server->getRouteAnnotation();
             RequestContext::create();
             RequestContext::set('server', $server);
-            $route = $server->getBean('RpcRoute');
+            /** @var \Imi\Rpc\Route\IRoute $route */
+            // $route = $server->getBean('RpcRoute');
+            $route = $server->getBean($server->getRouteClass());
             $serverTypeName = $this->getServerTypeName(BeanFactory::getObjectClass($server));
-            $eventName = 'IMI.ROUTE.INIT.DEFAULT:' . $serverTypeName;
-            foreach($controllerParser->getByServer($name) as $className => $classItem)
+            // $eventName = 'IMI.ROUTE.INIT.DEFAULT:' . $serverTypeName;
+            foreach($controllerParser->getByServer($name, $controllerAnnotationClass) as $className => $classItem)
             {
                 $classAnnotation = $classItem->getAnnotation();
-                foreach(AnnotationManager::getMethodsAnnotations($className, RpcAction::class) as $methodName => $actionAnnotations)
+                foreach(AnnotationManager::getMethodsAnnotations($className, $actionAnnotationClass) as $methodName => $actionAnnotations)
                 {
-                    $routes = AnnotationManager::getMethodAnnotations($className, $methodName, RpcRoute::class);
+                    /** @var \Imi\Rpc\Route\Annotation\Contract\IRpcRoute[] $routes */
+                    $routes = AnnotationManager::getMethodAnnotations($className, $methodName, $routeAnnotationClass);
                     if(!isset($routes[0]))
                     {
-                        $data = compact('className', 'classAnnotation', 'methodName');
-                        $result = null;
-                        $data['result'] = &$result;
-                        Event::trigger($eventName, $data);
-                        if(null !== $result)
-                        {
-                            $routes = [
-                                $result
-                            ];
-                        }
+                        // $data = compact('className', 'classAnnotation', 'methodName');
+                        // $result = null;
+                        // $data['result'] = &$result;
+                        // Event::trigger($eventName, $data);
+                        // if(null !== $result)
+                        // {
+                        //     $routes = [
+                        //         $result
+                        //     ];
+                        // }
+                        $routes = [
+                            $route->getDefaultRouteAnnotation($className, $methodName, $classAnnotation),
+                        ];
                     }
                     
                     foreach($routes as $routeItem)
                     {
-                        $route->addRuleAnnotation($routeItem, new RouteCallable($server, $className, $methodName), [
+                        $route->addRuleAnnotation($classAnnotation, $routeItem, new RouteCallable($server, $className, $methodName), [
                             'serverName'    =>  $name,
-                            'controller'    =>  $classAnnotation,
                         ]);
                     }
                 }

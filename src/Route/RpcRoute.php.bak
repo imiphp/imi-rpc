@@ -24,7 +24,7 @@ class RpcRoute implements IRoute
 
     /**
      * 增加路由规则，直接使用注解方式
-     * @param Imi\Rpc\Route\Annotation\RpcRoute $annotation
+     * @param \Imi\Rpc\Route\Annotation\Contract\IRpcRoute $annotation
      * @param mixed $callable
      * @param array $options
      * @return void

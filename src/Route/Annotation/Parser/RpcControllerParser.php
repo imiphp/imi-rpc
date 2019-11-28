@@ -1,21 +1,18 @@
 <?php
 namespace Imi\Rpc\Route\Annotation\Parser;
 
-use Imi\Bean\Annotation\Base;
-use Imi\Bean\Parser\BaseParser;
-use Imi\Util\Traits\TServerAnnotationParser;
-use Imi\Rpc\Route\Annotation\RpcController;
+use Imi\Config;
+use Imi\Util\Text;
 use Imi\Event\Event;
+use Imi\Bean\Parser\BaseParser;
+use Imi\Bean\Annotation\AnnotationManager;
+use Imi\Rpc\Route\Annotation\Contract\IRpcController;
 
 /**
  * 控制器注解处理器
  */
 class RpcControllerParser extends BaseParser
 {
-    use TServerAnnotationParser;
-
-    protected $controllerAnnotationClass = RpcController::class;
-
     /**
      * 处理方法
      * @param \Imi\Bean\Annotation\Base $annotation 注解类
@@ -28,6 +25,45 @@ class RpcControllerParser extends BaseParser
     {
         $eventName = 'IMI.RPC.ANNOTATION.PARSER:' . get_class($annotation);
         Event::trigger($eventName, \compact('annotation', 'className', 'target', 'targetName'), $this);
+    }
+
+    /**
+     * 根据服务器获取对应的控制器数据
+     * 
+     * @param string $serverName
+     * @param string $controllerAnnotationClass
+     * @return array
+     */
+    public function getByServer($serverName, $controllerAnnotationClass)
+    {
+        if(isset($this->cache[$serverName]))
+        {
+            return $this->cache[$serverName];
+        }
+        $namespaces = Config::get('@server.' . $serverName . '.beanScan', []);
+        foreach($namespaces as &$namespace)
+        {
+            if('\\' !== substr($namespace, -1, 1))
+            {
+                $namespace .= '\\';
+            }
+        }
+        unset($namespace);
+        $result = [];
+        foreach(AnnotationManager::getAnnotationPoints($controllerAnnotationClass, 'class') as $option)
+        {
+            $class = $option->getClass();
+            foreach($namespaces as $namespace)
+            {
+                if(Text::startwith($class, $namespace))
+                {
+                    $result[$class] = $option;
+                    continue 2;
+                }
+            }
+        }
+        $this->cache[$serverName] = $result;
+        return $result;
     }
 
 }
