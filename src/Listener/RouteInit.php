@@ -49,10 +49,7 @@ class RouteInit implements IEventListener
             RequestContext::create();
             RequestContext::set('server', $server);
             /** @var \Imi\Rpc\Route\IRoute $route */
-            // $route = $server->getBean('RpcRoute');
             $route = $server->getBean($server->getRouteClass());
-            $serverTypeName = $this->getServerTypeName(BeanFactory::getObjectClass($server));
-            // $eventName = 'IMI.ROUTE.INIT.DEFAULT:' . $serverTypeName;
             foreach($controllerParser->getByServer($name, $controllerAnnotationClass) as $className => $classItem)
             {
                 $classAnnotation = $classItem->getAnnotation();
@@ -62,16 +59,6 @@ class RouteInit implements IEventListener
                     $routes = AnnotationManager::getMethodAnnotations($className, $methodName, $routeAnnotationClass);
                     if(!isset($routes[0]))
                     {
-                        // $data = compact('className', 'classAnnotation', 'methodName');
-                        // $result = null;
-                        // $data['result'] = &$result;
-                        // Event::trigger($eventName, $data);
-                        // if(null !== $result)
-                        // {
-                        //     $routes = [
-                        //         $result
-                        //     ];
-                        // }
                         $routes = [
                             $route->getDefaultRouteAnnotation($className, $methodName, $classAnnotation),
                         ];
@@ -89,21 +76,4 @@ class RouteInit implements IEventListener
         }
     }
 
-    /**
-     * 获取服务器类型名称
-     *
-     * @param string $className
-     * @return string|boolean
-     */
-    private function getServerTypeName($className)
-    {
-        if(\preg_match('/Imi\\\\Server\\\\([^\\\\]+)\\\\Server/', $className, $matches) > 0)
-        {
-            return $matches[1];
-        }
-        else
-        {
-            return false;
-        }
-    }
 }
