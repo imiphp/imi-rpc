@@ -13,6 +13,13 @@ class RpcClientCoroutinePool extends BaseAsyncPool
 {
     use TUriResourceConfig;
 
+    /**
+     * 资源类
+     *
+     * @var string
+     */
+    protected $resource = RpcClientResource::class;
+
     public function __construct(string $name, \Imi\Pool\Interfaces\IPoolConfig $config = null, $resourceConfig = null)
     {
         parent::__construct($name, $config, $resourceConfig);
@@ -26,6 +33,6 @@ class RpcClientCoroutinePool extends BaseAsyncPool
     protected function createResource(): \Imi\Pool\Interfaces\IPoolResource
     {
         $config = $this->getNextResourceConfig();
-        return new RpcClientResource($this, BeanFactory::newInstance($config['clientClass'], $config));
+        return new $this->resource($this, BeanFactory::newInstance($config['clientClass'], $config));
     }
 }
