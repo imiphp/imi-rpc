@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\Rpc\Client;
 
 interface IService
 {
     /**
      * 获取服务名称.
-     *
-     * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * 调用服务
@@ -19,7 +19,7 @@ interface IService
      *
      * @return mixed
      */
-    public function call($method, $args = []);
+    public function call(string $method, array $args = []);
 
     /**
      * 获取客户端对象

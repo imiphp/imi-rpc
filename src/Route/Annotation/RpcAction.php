@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\Rpc\Route\Annotation;
 
 use Imi\Bean\Annotation\Base;
@@ -13,6 +15,7 @@ use Imi\Rpc\Route\Annotation\Contract\IRpcAction;
  * @Target("METHOD")
  * @Parser("Imi\Rpc\Route\Annotation\Parser\RpcControllerParser")
  */
+#[\Attribute(\Attribute::TARGET_METHOD)]
 class RpcAction extends Base implements IRpcAction
 {
 }

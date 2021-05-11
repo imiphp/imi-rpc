@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\Rpc\Route\Annotation;
 
 use Imi\Bean\Annotation\Base;
@@ -12,7 +14,11 @@ use Imi\Rpc\Route\Annotation\Contract\IRpcController;
  * @Annotation
  * @Target("CLASS")
  * @Parser("Imi\Rpc\Route\Annotation\Parser\RpcControllerParser")
+ *
+ * @property string               $prefix 路由前缀
+ * @property string|string[]|null $server 指定当前控制器允许哪些服务器使用。支持字符串或数组，默认为 null 则不限制。
  */
+#[\Attribute(\Attribute::TARGET_CLASS)]
 class RpcController extends Base implements IRpcController
 {
     /**
@@ -20,21 +26,13 @@ class RpcController extends Base implements IRpcController
      *
      * @var string
      */
-    protected $defaultFieldName = 'prefix';
+    protected ?string $defaultFieldName = 'prefix';
 
     /**
-     * 路由前缀
-     *
-     * @var string
+     * @param string|string[]|null $server
      */
-    public $prefix;
-
-    /**
-     * 指定当前控制器允许哪些服务器使用.
-     *
-     * 支持字符串或数组，默认为 null 则不限制
-     *
-     * @var string|string[]|null
-     */
-    public $server = null;
+    public function __construct(?array $__data = null, string $prefix = '', $server = null)
+    {
+        parent::__construct(...\func_get_args());
+    }
 }

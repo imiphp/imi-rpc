@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\Rpc\Client\Pool;
 
 use Imi\Pool\BasePoolResource;
@@ -12,10 +14,8 @@ class RpcClientResource extends BasePoolResource
 {
     /**
      * rpcClient对象
-     *
-     * @var IRpcClient
      */
-    private $client;
+    private IRpcClient $client;
 
     public function __construct(\Imi\Pool\Interfaces\IPool $pool, IRpcClient $client)
     {
@@ -25,10 +25,8 @@ class RpcClientResource extends BasePoolResource
 
     /**
      * 打开
-     *
-     * @return bool
      */
-    public function open()
+    public function open(): bool
     {
         $this->client->open();
 
@@ -37,37 +35,29 @@ class RpcClientResource extends BasePoolResource
 
     /**
      * 关闭.
-     *
-     * @return void
      */
-    public function close()
+    public function close(): void
     {
         $this->client->close();
     }
 
     /**
      * 获取对象实例.
-     *
-     * @return IRpcClient
      */
-    public function getInstance()
+    public function getInstance(): IRpcClient
     {
         return $this->client;
     }
 
     /**
      * 重置资源，当资源被使用后重置一些默认的设置.
-     *
-     * @return void
      */
-    public function reset()
+    public function reset(): void
     {
     }
 
     /**
      * 检查资源是否可用.
-     *
-     * @return bool
      */
     public function checkState(): bool
     {

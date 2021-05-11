@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Imi\Rpc\Route\Annotation\Parser;
 
 use Imi\Bean\Annotation\AnnotationManager;
@@ -13,10 +15,7 @@ use Imi\Util\Text;
  */
 class RpcControllerParser extends BaseParser
 {
-    /**
-     * @var array
-     */
-    protected $cache = [];
+    protected array $cache = [];
 
     /**
      * 处理方法.
@@ -25,10 +24,8 @@ class RpcControllerParser extends BaseParser
      * @param string                    $className  类名
      * @param string                    $target     注解目标类型（类/属性/方法）
      * @param string                    $targetName 注解目标名称
-     *
-     * @return void
      */
-    public function parse(\Imi\Bean\Annotation\Base $annotation, string $className, string $target, string $targetName)
+    public function parse(\Imi\Bean\Annotation\Base $annotation, string $className, string $target, string $targetName): void
     {
         $eventName = 'IMI.RPC.ANNOTATION.PARSER:' . \get_class($annotation);
         Event::trigger($eventName, compact('annotation', 'className', 'target', 'targetName'), $this);
@@ -36,13 +33,8 @@ class RpcControllerParser extends BaseParser
 
     /**
      * 根据服务器获取对应的控制器数据.
-     *
-     * @param string $serverName
-     * @param string $controllerAnnotationClass
-     *
-     * @return array
      */
-    public function getByServer($serverName, $controllerAnnotationClass)
+    public function getByServer(string $serverName, string $controllerAnnotationClass): array
     {
         if (isset($this->cache[$serverName]))
         {
