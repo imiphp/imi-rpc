@@ -1,11 +1,10 @@
 {
     "name": "imiphp/imi-rpc",
     "type": "library",
-    "license": "MIT",
+    "license": "MulanPSL-2.0",
     "description": "在 imi 框架中开发 RPC 服务的基础组件",
     "require": {
-        "php": ">=7.4 <8.2",
-        "imiphp/imi-swoole": "~2.0.0"
+        "imiphp/imi-swoole": "~3.0.0"
     },
     "require-dev": {},
     "autoload": {
@@ -14,9 +13,20 @@
         }
     },
     "autoload-dev": {
+        "psr-4": {
+            "Imi\\Rpc\\Dev\\": "dev/"
+        },
         "files": [
             "../../../vendor/autoload.php",
             "../../../dev/try-include-swoole.php"
         ]
-    }
+    },
+    "scripts": {
+        "pre-install-cmd": "Imi\\Rpc\\Dev\\Dev::preUpdate",
+        "pre-update-cmd": "Imi\\Rpc\\Dev\\Dev::preUpdate",
+        "post-install-cmd": "Imi\\Rpc\\Dev\\Dev::postUpdate",
+        "post-update-cmd": "Imi\\Rpc\\Dev\\Dev::postUpdate"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

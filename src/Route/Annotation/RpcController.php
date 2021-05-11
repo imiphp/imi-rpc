@@ -12,7 +12,9 @@ use Imi\Rpc\Route\Annotation\Contract\IRpcController;
  * RPC 控制器注解.
  *
  * @Annotation
+ *
  * @Target("CLASS")
+ *
  * @Parser("Imi\Rpc\Route\Annotation\Parser\RpcControllerParser")
  *
  * @property string               $prefix 路由前缀

@@ -17,7 +17,7 @@ use Imi\Util\DelayServerBeanCallable;
 /**
  * RPC 服务器路由初始化.
  *
- * @Listener("IMI.MAIN_SERVER.WORKER.START")
+ * @Listener(eventName="IMI.MAIN_SERVER.WORKER.START", one=true)
  */
 class RouteInit implements IEventListener
 {
@@ -56,7 +56,7 @@ class RouteInit implements IEventListener
                 {
                     continue;
                 }
-                foreach (AnnotationManager::getMethodsAnnotations($className, $actionAnnotationClass) as $methodName => $actionAnnotations)
+                foreach (AnnotationManager::getMethodsAnnotations($className, $actionAnnotationClass) as $methodName => $_)
                 {
                     /** @var \Imi\Rpc\Route\Annotation\Contract\IRpcRoute[] $routes */
                     $routes = AnnotationManager::getMethodAnnotations($className, $methodName, $routeAnnotationClass);
