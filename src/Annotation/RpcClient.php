@@ -1,4 +1,5 @@
 <?php
+
 namespace Imi\Rpc\Annotation;
 
 use Imi\Aop\Annotation\Inject;
@@ -6,7 +7,8 @@ use Imi\Bean\Annotation\Parser;
 use Imi\Rpc\Client\Pool\RpcClientPool;
 
 /**
- * RPC 客户端注入
+ * RPC 客户端注入.
+ *
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION"})
  * @Parser("Imi\Aop\Parser\AopParser")
@@ -14,7 +16,7 @@ use Imi\Rpc\Client\Pool\RpcClientPool;
 class RpcClient extends Inject
 {
     /**
-     * 连接池名称
+     * 连接池名称.
      *
      * @var string|null
      */
@@ -29,5 +31,4 @@ class RpcClient extends Inject
     {
         return RpcClientPool::getInstance($this->poolName);
     }
-
 }

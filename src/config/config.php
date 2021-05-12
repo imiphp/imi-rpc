@@ -1,6 +1,7 @@
 <?php
+
 return [
-    'beanScan'  =>  [
+    'beanScan'  => [
         'Imi\Rpc\Annotation',
         'Imi\Rpc\Listener',
         'Imi\Rpc\Route',

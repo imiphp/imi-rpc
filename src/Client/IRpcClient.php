@@ -1,10 +1,11 @@
 <?php
+
 namespace Imi\Rpc\Client;
 
 interface IRpcClient
 {
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param array $options 配置
      */
@@ -12,18 +13,21 @@ interface IRpcClient
 
     /**
      * 打开
-     * @return boolean
+     *
+     * @return bool
      */
     public function open();
 
     /**
-     * 关闭
+     * 关闭.
+     *
      * @return void
      */
     public function close();
 
     /**
-     * 是否已连接
+     * 是否已连接.
+     *
      * @return bool
      */
     public function isConnected(): bool;
@@ -39,15 +43,15 @@ interface IRpcClient
      * 获取服务对象
      *
      * @param string $name 服务名
+     *
      * @return \Imi\Rpc\Client\IService
      */
     public function getService($name = null): IService;
 
     /**
-     * 获取配置
+     * 获取配置.
      *
      * @return array
      */
     public function getOptions();
-
 }
