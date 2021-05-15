@@ -1,10 +1,11 @@
 <?php
+
 namespace Imi\Rpc\Client;
 
 interface IService
 {
     /**
-     * 获取服务名称
+     * 获取服务名称.
      *
      * @return string|null
      */
@@ -14,7 +15,8 @@ interface IService
      * 调用服务
      *
      * @param string $method 方法名
-     * @param array $args 参数
+     * @param array  $args   参数
+     *
      * @return mixed
      */
     public function call($method, $args = []);
@@ -25,5 +27,4 @@ interface IService
      * @return \Imi\Rpc\Client\IRpcClient
      */
     public function getClient(): IRpcClient;
-
 }
