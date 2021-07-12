@@ -1,20 +1,20 @@
 <?php
+
 namespace Imi\Rpc\Client\Pool;
 
-use Imi\App;
 use Imi\Bean\BeanFactory;
 use Imi\Pool\BaseSyncPool;
 use Imi\Pool\TUriResourceConfig;
 
 /**
- * 同步RPC连接池
+ * 同步RPC连接池.
  */
 class RpcClientSyncPool extends BaseSyncPool
 {
     use TUriResourceConfig;
 
     /**
-     * 资源类
+     * 资源类.
      *
      * @var string
      */
@@ -27,12 +27,14 @@ class RpcClientSyncPool extends BaseSyncPool
     }
 
     /**
-     * 创建资源
+     * 创建资源.
+     *
      * @return \Imi\Pool\Interfaces\IPoolResource
      */
     protected function createResource(): \Imi\Pool\Interfaces\IPoolResource
     {
         $config = $this->getNextResourceConfig();
+
         return new $this->resource($this, BeanFactory::newInstance($config['clientClass'], $config));
     }
 }
